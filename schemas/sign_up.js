@@ -1,0 +1,45 @@
+import Joi from "joi-oid";
+
+const schema = Joi.object({
+  name: Joi.string().required().min(3).max(25).messages({
+    "string.min": "El nombre debe contener 3 caracteres como mínimo",
+    "string.max": "El nombre no puede contener más de 25 caracteres",
+    "string.empty": "El nombre no puede quedar vacío",
+    "any.required": "El nombre es requerido",
+  }),
+  last_name: Joi.string().required().min(3).max(25).messages({
+    "string.min": "El apellido debe contener 3 caracteres como mínimo",
+    "string.max": "El apellido no puede contener más de 25 caracteres",
+    "string.empty": "El apellido no puede quedar vacío",
+    "any.required": "El apellido es requerido",
+  }),
+  city: Joi.string().required().min(3).max(20).messages({
+    "string.min": "La ciudad debe contener 3 caracteres como mínimo",
+    "string.max": "La ciudad no puede contener más de 20 caracteres",
+    "string.empty": "La ciudad no puede quedar vacío",
+    "any.required": "La ciudad es requerido",
+  }),
+  country: Joi.string().required().min(3).max(20).messages({
+    "string.min": "El país debe contener 3 caracteres como mínimo",
+    "string.max": "El país no puede contener más de 20 caracteres",
+    "string.empty": "El país no puede quedar vacío",
+    "any.required": "El país es requerido",
+  }),
+  email: Joi.string()
+    .required()
+    .min(8)
+    .email({ minDomainSegments: 2 })
+    .messages({
+      "string.min": "El email debe contener 8 caracteres como mínimo",
+      "string.empty": "El email no puede quedar vacío",
+      "any.required": "El email es requerido",
+    }),
+  password: Joi.string().required().min(8).max(30).messages({
+    "string.min": "La contraseña debe contener 8 caracteres como mínimo",
+    "string.max": "La contraseña debe contener 30 caracteres como máximo",
+    "string.empty": "La contraseña no puede quedar vacía",
+    "any.required": "La contraseña es requerida",
+  }),
+});
+
+export default schema;
