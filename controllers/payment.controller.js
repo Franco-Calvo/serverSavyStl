@@ -1,5 +1,5 @@
 import mercadopago from "mercadopago";
-import { MERCADOPAGO_API_KEY } from "../config.js";
+import { MERCADOPAGO_API_KEY } from "../src/config.js";
 import User from "../models/Users.js";
 import Subscription from "../models/Subscription.js";
 

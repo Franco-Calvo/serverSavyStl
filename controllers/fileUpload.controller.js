@@ -1,9 +1,9 @@
 import multer from "multer";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import s3 from "../config/aws.js";
+import FileModel from "../models/File.js";
+import User from "../models/Users.js";
 
-// Configuración de multer para la carga de archivos el peso es de 1MB máx
-// Cambiar el 1 para aumentar los MB 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -11,7 +11,9 @@ const upload = multer({
   },
 });
 
-const uploadFiles = (req, res) => {
+const uploadFiles = async (req, res) => {
+  const userId = req.user._id;
+
   try {
     upload.fields([
       { name: "file", maxCount: 1 },
@@ -29,33 +31,37 @@ const uploadFiles = (req, res) => {
         Body: file[0].buffer,
         ACL: "public-read",
         ContentType: file[0].mimetype,
+        Metadata: {
+          uploadedBy: userId.toString(),
+        },
       };
+
       const paramsImage = {
         Bucket: "filestl",
         Key: image[0].originalname,
         Body: image[0].buffer,
         ACL: "public-read",
         ContentType: image[0].mimetype,
+        Metadata: {
+          uploadedBy: userId.toString(),
+        },
       };
 
-      await s3.send(new PutObjectCommand(paramsFile));
-      await s3.send(new PutObjectCommand(paramsImage));
+      const uploadFileResponse = await s3.send(new PutObjectCommand(paramsFile));
+      const uploadImageResponse = await s3.send(new PutObjectCommand(paramsImage));
 
-      // const params = {
-      //   Bucket: "filestl",
-      //   Key: {
-      //     file: file[0].originalname,
-      //     image: image[0].originalname,
-      //   },
-      //   Body: {
-      //     file: file[0].buffer,
-      //     image: image[0].buffer,
-      //   },
-      // };
+      const fileUrl = `https://filestl.s3.amazonaws.com/${file[0].originalname}`;
+      const imageUrl = `https://filestl.s3.amazonaws.com/${image[0].originalname}`;
 
-      // console.log(file[0], image[0]);
+      const newFile = new FileModel({
+        name: req.body.name,
+        description: req.body.description,
+        image: imageUrl,
+        fileModel: fileUrl,
+        category: req.body.category,
+      });
 
-      // await s3.send(new PutObjectCommand(params));
+      await newFile.save();
 
       return res.status(200).json({ message: "Files uploaded successfully" });
     });

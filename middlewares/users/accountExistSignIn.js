@@ -6,7 +6,6 @@ async function accountExistSignIn(req, res, next) {
   });
   if (user) {
     req.user = {
-      id: user._id,
       email: user.email,
       password: user.password,
       is_online: user.is_online,

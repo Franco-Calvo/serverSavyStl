@@ -72,6 +72,27 @@ const controller = {
       next(error);
     }
   },
+
+  verifyToken: async (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1]; // Obtener el token de la cabecera de autorización
+
+    try {
+      const decoded = jsonwebtoken.verify(token, process.env.SECRET); // Verificar el token utilizando la misma clave secreta que utilizaste para firmar el token en el inicio de sesión
+
+      // Si el token es válido, puedes realizar acciones adicionales aquí, como buscar al usuario en la base de datos y devolver información adicional si es necesario.
+
+      return res.status(200).json({
+        success: true,
+        message: "Token válido",
+        decoded, // Opcional: puedes devolver la información decodificada del token si lo deseas
+      });
+    } catch (error) {
+      return res.status(401).json({
+        success: false,
+        message: "Token inválido",
+      });
+    }
+  },
 };
 
 export default controller;

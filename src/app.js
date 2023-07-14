@@ -1,9 +1,9 @@
 import express from "express";
 import { default as morgan } from "morgan";
 import path from "path";
-import "./config/database.js";
-import { errorHandler, errorNotFound } from "./middlewares/error.js";
-import indexRouter from "./routes/index.routes.js";
+import "../config/database.js";
+import { errorHandler, errorNotFound } from "../middlewares/error.js";
+import indexRouter from "../routes/index.routes.js";
 import { __dirname } from "./utils.js";
 import cors from "cors";
 

@@ -13,18 +13,6 @@ const schema = Joi.object({
     "string.empty": "El apellido no puede quedar vacío",
     "any.required": "El apellido es requerido",
   }),
-  city: Joi.string().required().min(3).max(20).messages({
-    "string.min": "La ciudad debe contener 3 caracteres como mínimo",
-    "string.max": "La ciudad no puede contener más de 20 caracteres",
-    "string.empty": "La ciudad no puede quedar vacío",
-    "any.required": "La ciudad es requerido",
-  }),
-  country: Joi.string().required().min(3).max(20).messages({
-    "string.min": "El país debe contener 3 caracteres como mínimo",
-    "string.max": "El país no puede contener más de 20 caracteres",
-    "string.empty": "El país no puede quedar vacío",
-    "any.required": "El país es requerido",
-  }),
   email: Joi.string()
     .required()
     .min(8)
