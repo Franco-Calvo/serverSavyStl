@@ -1,7 +1,7 @@
 import mercadopago from "mercadopago";
 import { MERCADOPAGO_API_KEY } from "../config.js";
 import User from "../models/Users.js";
-import Subscription from "../models/Subscription.js";
+import Subscription, { ISubscription } from "../models/Subscription.js";
 import { Request, Response } from "express";
 import {
   ERROR_MESSAGES,
@@ -105,7 +105,7 @@ export const receiveWebhook = async (req: Request, res: Response) => {
             startDate: new Date(),
             duration: 1,
           };
-          const subscription = new Subscription({
+          const subscription: ISubscription = new Subscription({
             ...new_Subscription,
             endDate: getEndDate(new_Subscription),
           });

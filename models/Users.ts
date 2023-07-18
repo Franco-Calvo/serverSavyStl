@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export interface IUser {
   is_online: Boolean;
@@ -8,9 +8,9 @@ export interface IUser {
   password: string;
   name: String;
   last_name: String;
-  subscription: null;
+  subscription: mongoose.Schema.Types.ObjectId | undefined;
   timestamps: Boolean;
-  _id?: String;
+  _id?: mongoose.Schema.Types.ObjectId;
 }
 
 export const defaultUser: IUser = {
@@ -21,11 +21,11 @@ export const defaultUser: IUser = {
   password: "",
   name: "",
   last_name: "",
-  subscription: null,
+  subscription: undefined,
   timestamps: true,
 };
 
-const userSchema = new mongoose.Schema(
+const userSchema: Schema<IUser> = new mongoose.Schema(
   {
     name: { type: String, required: true },
     last_name: { type: String, required: true },

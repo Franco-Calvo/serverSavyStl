@@ -2,7 +2,7 @@ import mongoose, { Model, Schema } from "mongoose";
 
 export interface ICategory {
   name: string;
-  _id?: string;
+  _id?: mongoose.Schema.Types.ObjectId;
 }
 
 const categorySchema: Schema<ICategory> = new Schema({

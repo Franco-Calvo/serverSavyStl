@@ -6,7 +6,7 @@ export interface IFile {
   image: string;
   fileModel: string;
   category: string;
-  _id?: string;
+  _id?: mongoose.Schema.Types.ObjectId;
 }
 
 const schema: Schema<IFile> = new Schema({

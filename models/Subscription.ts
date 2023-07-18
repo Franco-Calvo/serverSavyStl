@@ -1,15 +1,15 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface ISubscription extends Document {
-  user: mongoose.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId;
   subscriptionType: "day" | "month" | "year";
   startDate: Date;
   endDate: Date;
   duration: number;
-  _id?: String;
+  _id?: mongoose.Schema.Types.ObjectId;
 }
 
-const subscriptionSchema: Schema = new Schema(
+const subscriptionSchema: Schema<ISubscription> = new Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     subscriptionType: {
