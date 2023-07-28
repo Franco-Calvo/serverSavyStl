@@ -76,13 +76,14 @@ const controller = {
 
   verifyToken: async (req: Request, res: Response, next: NextFunction) => {
     const authorization: string = req.headers.authorization || "";
-
+    const user: any = req.user;
     try {
-      const decoded = jsonwebtoken.verify(authorization, secret);
-
+      const token = authorization.replace("Bearer ", "");
+      const decoded = jsonwebtoken.verify(token, secret);
       return res.status(200).json({
         success: true,
         message: "Token válido",
+        is_admin: user.is_admin,
         decoded,
       });
     } catch (error) {
@@ -90,6 +91,7 @@ const controller = {
         success: false,
         message: "Token inválido",
       });
+      console.log(error);
     }
   },
 };

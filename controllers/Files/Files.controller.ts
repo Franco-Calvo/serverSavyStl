@@ -7,8 +7,18 @@ import {
 import FileModel, { IFile } from "../../models/File.js";
 
 const getFiles = async (req: Request, res: Response) => {
+  const { name, category } = req.query;
+
   try {
-    const files: IFile[] = await FileModel.find();
+    let query: any = {};
+    if (name) {
+      query.name = { $regex: new RegExp(name.toString(), "i") };
+    }
+    if (category) {
+      query.category = category;
+    }
+    const files: IFile[] = await FileModel.find(query);
+    res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
     return successHandler(files, req, res);
   } catch (error) {
     console.error("Error al obtener los archivos:", error);
@@ -25,6 +35,7 @@ const getFileById = async (req: Request, res: Response) => {
     if (!file)
       return errorHandler(ERROR_MESSAGES.NO_EXIST_ON_DATABASE, req, res);
 
+    res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
     return successHandler(file, req, res);
   } catch (error) {
     console.error("Error al obtener el archivo por ID:", error);
@@ -34,12 +45,12 @@ const getFileById = async (req: Request, res: Response) => {
 
 const updateFile = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, description, category } = req.body;
+  const { name, description, category, status } = req.body;
 
   try {
     const file = await FileModel.findByIdAndUpdate(
       id,
-      { name, description, category },
+      { name, description, category, status },
       { new: true }
     );
     if (!file) {

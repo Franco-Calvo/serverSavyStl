@@ -9,12 +9,13 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, secret, (err, user) => {
-    if (err) return res.sendStatus(403);
-    console.log(err);
+  try {
+    const user = jwt.verify(token, secret);
     req.user = user;
-
     next();
-  });
+  } catch (err) {
+    return res.sendStatus(403);
+  }
 }
+
 export default authenticateToken;

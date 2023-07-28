@@ -27,14 +27,24 @@ export const createOrder = async (req: Request, res: Response) => {
     access_token: MERCADOPAGO_API_KEY,
   });
 
-  const { email } = req.body;
+  const { email, subscriptionType } = req.body;
+
+  let unitPrice
+
+  if (subscriptionType === "day") {
+    unitPrice = 50;
+  } else if (subscriptionType === "month") {
+    unitPrice = 100;
+  } else if (subscriptionType === "year") {
+    unitPrice = 500;
+  }
 
   try {
     const result = await mercadopago.preferences.create({
       items: [
         {
-          title: "Suscription",
-          unit_price: 50,
+          title: "Suscripción",
+          unit_price: unitPrice,
           currency_id: "ARS",
           quantity: 1,
         },
@@ -58,7 +68,11 @@ export const createOrder = async (req: Request, res: Response) => {
     ordersCreated.push({
       email,
       paymentID: result.body?.id,
-      subscriptionInfo: null,
+      subscriptionInfo: {
+        subscriptionType,
+        startDate: new Date(),
+        duration: 1,
+      },
     });
     res.json(result.body);
   } catch (error) {
@@ -95,22 +109,29 @@ export const receiveWebhook = async (req: Request, res: Response) => {
       const orderMatch = ordersCreated.find(
         (order) => order.paymentID === payment.preference_id
       );
-      if (orderMatch) {
+
+      if (orderMatch && orderMatch.subscriptionInfo) {
         const user = await User.findOne({ email: orderMatch.email });
 
-        if (user) {
+        if (user && !user.subscription) {
+          const { subscriptionType, startDate, duration } =
+            orderMatch.subscriptionInfo;
+
           const new_Subscription = {
             user: user._id,
-            subscriptionType: "month",
-            startDate: new Date(),
-            duration: 1,
+            subscriptionType,
+            startDate,
+            duration,
           };
+
           const subscription: ISubscription = new Subscription({
             ...new_Subscription,
             endDate: getEndDate(new_Subscription),
           });
+
           await subscription.save();
           user.subscription = subscription._id;
+          user.is_member = true;
           await user.save();
         }
       }
