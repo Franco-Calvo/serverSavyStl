@@ -6,7 +6,7 @@ import http from "http";
 
 const logger = debug("serversavystl:server");
 
-const port = normalizePort(process.env.PORT || "8000");
+const port = (process.env.PORT || "8000");
 app.set("port", port);
 
 const server = http.createServer(app);
