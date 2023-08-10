@@ -1,9 +1,9 @@
 import express, { Router } from "express";
-import awsRouter from "./aws.routes";
-import userRouter from "./users.routes";
-import paymentRoutes from "./payment.routes";
-import categoryRouter from "./categories.routes";
-import ticketsRouter from "./tickets.routes";
+import awsRouter from "./aws.routes.js";
+import userRouter from "./users.routes.js";
+import paymentRoutes from "./payment.routes.js";
+import categoryRouter from "./categories.routes.js";
+import ticketsRouter from "./tickets.routes.js";
 
 const router: Router = express.Router();
 

@@ -2,9 +2,9 @@ import { FilterQuery } from "mongoose";
 import TicketModel, {
   Ticket,
   TicketServiceResponse,
-} from "../models/Ticket.model";
-import { IMessageTicket } from "../models/TicketResponse.model";
-import TicketResponseModel from "../models/TicketResponse.model";
+} from "../models/Ticket.model.js";
+import { IMessageTicket } from "../models/TicketResponse.model.js";
+import TicketResponseModel from "../models/TicketResponse.model.js";
 
 // import { sendMessageToAdmins } from "../helpers/relayers.js";
 // import { emitEventToAddress } from "../controllers/SocketController.js";

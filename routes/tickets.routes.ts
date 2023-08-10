@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import TicketController from "../controllers/Tickets/Ticket.controller";
+import TicketController from "../controllers/Tickets/Ticket.controller.js";
 const router: Router = express.Router();
 
 // router.post("/", validator(ticketSchema), createTicket);
