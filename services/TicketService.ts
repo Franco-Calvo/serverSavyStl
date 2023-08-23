@@ -147,12 +147,12 @@ const getFilteredTickets = async (
   filters: FilterQuery<Ticket>
 ): Promise<Ticket[]> => {
   try {
-    const result: Ticket[] = await TicketModel.find(filters)
-      .sort({
-        createdAt: -1,
-      })
-      .skip(itemsPerPage * page)
-      .limit(itemsPerPage);
+    const result: Ticket[] = await TicketModel.find({})
+      // .sort({
+      //   createdAt: -1,
+      // })
+      // .skip(itemsPerPage * page)
+      // .limit(itemsPerPage);
 
     return result;
   } catch (err) {
@@ -215,6 +215,18 @@ const getTicketByUserId = async (
   }
 };
 
+const getAllTickets = async(): Promise<Ticket[]> => {
+  try {
+    const allTickets : Ticket[] = await TicketModel.find().sort({
+      createdAt: -1,
+    })
+    return allTickets;
+  } catch (err) {
+    console.log(err)
+    return []
+  }
+}
+
 export default {
   addTicket,
   addMessageToTicket,
@@ -223,6 +235,7 @@ export default {
   approvedTicket,
   getTicket,
   getTicketsByUser,
+  getAllTickets, 
   getFilteredTickets,
   getRecentTicketsByUser,
   getSizeDocuments,

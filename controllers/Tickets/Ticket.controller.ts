@@ -232,6 +232,16 @@ const getTicketMessages = async (
   return errorHandler(ERROR_MESSAGES.EMPTY_RESPONSE, req, res);
 };
 
+const getAllTickets = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const allTickets: Ticket[] = await TicketService.getAllTickets();
+      return res.status(200).json(allTickets);
+  } catch (error) {
+    return errorHandler(ERROR_MESSAGES.UNEXPECTED_ERROR, req, res);
+  }
+}
+
+
 export default {
   getTicket,
   createTicket,
@@ -240,4 +250,5 @@ export default {
   getRecentsTickets,
   getTicketMessages,
   getFilteredTickets,
+  getAllTickets
 };
