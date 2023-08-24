@@ -7,7 +7,6 @@ import {
   updateFile,
 } from "../controllers/Files/Files.controller.js";
 import passport from "../middlewares/passport.js";
-// import uploadImage from "../controllers/advertisingUpload.controller.js";
 
 const router: Router = express.Router();
 
@@ -16,8 +15,6 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   uploadFiles
 );
-
-// router.post("/advertising", passport.authenticate("jwt", { session: false }), uploadImage);
 
 router.get("/files", getFiles);
 router.get("/files/:id", getFileById);
