@@ -8,11 +8,17 @@ import { __dirname } from "./utils.js";
 import cors from "cors";
 import { errorHandler, errorNotFound } from "./middlewares/response_handler.js";
 import { logRequest } from "./logger.js";
-import { initializeSocket } from "./config/socket.js";
+import { setupSockets } from "./config/socket.js";
 
 const app = express();
-const server = http.createServer(app);
-initializeSocket(server);
+const httpServer = http.createServer(app);
+const PORT = process.env.PORT || "8080";
+
+const io = setupSockets(httpServer);
+
+httpServer.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");

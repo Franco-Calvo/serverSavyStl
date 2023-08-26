@@ -5,6 +5,7 @@ import TicketModel, {
 } from "../models/Ticket.model.js";
 import { IMessageTicket } from "../models/TicketResponse.model.js";
 import TicketResponseModel from "../models/TicketResponse.model.js";
+import { emitEventToUser } from "../config/socket.js";
 
 // import { sendMessageToAdmins } from "../helpers/relayers.js";
 // import { emitEventToAddress } from "../controllers/SocketController.js";
@@ -57,6 +58,8 @@ const setRepliedByAdmin = async (message: IMessageTicket) => {
     },
     { $set: { unreadMsg: { admin: false, user: true }, status: "replied" } }
   );
+
+  if (ticket) emitEventToUser(ticket.userId, "new_message", message);
 };
 
 const addMessageToTicket = async (
@@ -148,11 +151,11 @@ const getFilteredTickets = async (
 ): Promise<Ticket[]> => {
   try {
     const result: Ticket[] = await TicketModel.find({})
-      // .sort({
-      //   createdAt: -1,
-      // })
-      // .skip(itemsPerPage * page)
-      // .limit(itemsPerPage);
+      .sort({
+        createdAt: -1,
+      })
+      .skip(itemsPerPage * page)
+      .limit(itemsPerPage);
 
     return result;
   } catch (err) {
@@ -215,17 +218,17 @@ const getTicketByUserId = async (
   }
 };
 
-const getAllTickets = async(): Promise<Ticket[]> => {
+const getAllTickets = async (): Promise<Ticket[]> => {
   try {
-    const allTickets : Ticket[] = await TicketModel.find().sort({
+    const allTickets: Ticket[] = await TicketModel.find().sort({
       createdAt: -1,
-    })
+    });
     return allTickets;
   } catch (err) {
-    console.log(err)
-    return []
+    console.log(err);
+    return [];
   }
-}
+};
 
 export default {
   addTicket,
@@ -235,7 +238,7 @@ export default {
   approvedTicket,
   getTicket,
   getTicketsByUser,
-  getAllTickets, 
+  getAllTickets,
   getFilteredTickets,
   getRecentTicketsByUser,
   getSizeDocuments,

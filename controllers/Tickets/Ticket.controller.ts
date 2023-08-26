@@ -21,6 +21,7 @@ import TicketService, {
 } from "../../services/TicketService.js";
 // import { adminAddresses, sendMessageToAdmins } from "../helpers/relayers.js";
 // import { emitEventToAddress } from "./SocketController.js";
+import { io } from "../../config/socket.js";
 
 const createTicket = async (req: Request, res: Response): Promise<Response> => {
   const ticketRequest: Ticket = req.body;
@@ -101,7 +102,9 @@ const addMessage = async (req: Request, res: Response): Promise<Response> => {
       const new_message: IMessageTicket | null =
         await TicketService.addMessageToTicket(message);
 
-      if (new_message) return successHandler(new_message, req, res);
+      if (new_message) {
+        return successHandler(new_message, req, res);
+      }
     } else {
       return res.status(400).send({
         status: "failed",
@@ -117,14 +120,13 @@ const addMessage = async (req: Request, res: Response): Promise<Response> => {
 };
 
 const getTicket = async (req: Request, res: Response): Promise<Response> => {
-  const { id } = req.params; // Aquí el "id" sería el "userId" enviado desde el front
+  const { id } = req.params;
   const ticket: TicketServiceResponse = await TicketService.getTicketByUserId(
     id
   );
 
   if (ticket) {
     try {
-      // Aquí puedes agregar la lógica que desees para manejar el ticket obtenido por el userId
       return successHandler(ticket, req, res);
     } catch (err) {
       return errorHandler(ERROR_MESSAGES.INVALID_PARAMETERS, req, res);
@@ -170,9 +172,6 @@ const getRecentsTickets = async (
 ): Promise<Response> => {
   const { userId } = req.body;
 
-  // if (address !== signatureAddress)
-  //   return errorHandler(ERROR_MESSAGES.INVALID_SIGNATURE, req, res);
-
   const tickets: paginationType = await TicketService.getRecentTicketsByUser(
     userId
   );
@@ -187,9 +186,6 @@ const getFilteredTickets = async (
   res: Response
 ): Promise<Response> => {
   const { userId, page } = req.body;
-
-  // if (address !== signatureAddress)
-  //   return errorHandler(ERROR_MESSAGES.INVALID_SIGNATURE, req, res);
 
   try {
     const filterQuery: FilterQuery<Ticket> = {
@@ -232,15 +228,17 @@ const getTicketMessages = async (
   return errorHandler(ERROR_MESSAGES.EMPTY_RESPONSE, req, res);
 };
 
-const getAllTickets = async (req: Request, res: Response): Promise<Response> => {
+const getAllTickets = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const allTickets: Ticket[] = await TicketService.getAllTickets();
-      return res.status(200).json(allTickets);
+    return res.status(200).json(allTickets);
   } catch (error) {
     return errorHandler(ERROR_MESSAGES.UNEXPECTED_ERROR, req, res);
   }
-}
-
+};
 
 export default {
   getTicket,
@@ -250,5 +248,5 @@ export default {
   getRecentsTickets,
   getTicketMessages,
   getFilteredTickets,
-  getAllTickets
+  getAllTickets,
 };
