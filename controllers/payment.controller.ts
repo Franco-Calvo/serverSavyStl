@@ -29,14 +29,14 @@ export const createOrder = async (req: Request, res: Response) => {
 
   const { email, subscriptionType } = req.body;
 
-  let unitPrice
+  let unitPrice;
 
-  if (subscriptionType === "day") {
-    unitPrice = 50;
-  } else if (subscriptionType === "month") {
-    unitPrice = 100;
+  if (subscriptionType === "month") {
+    unitPrice = 3499;
+  } else if (subscriptionType === "semiannual") {
+    unitPrice = 2899 * 6;
   } else if (subscriptionType === "year") {
-    unitPrice = 500;
+    unitPrice = 2399 * 12;
   }
 
   try {
@@ -74,6 +74,7 @@ export const createOrder = async (req: Request, res: Response) => {
         duration: 1,
       },
     });
+
     res.json(result.body);
   } catch (error) {
     return errorHandler(ERROR_MESSAGES.UNEXPECTED_ERROR, req, res);
@@ -87,12 +88,12 @@ function getEndDate({
 }: SubscriptionInfoType) {
   let endDate = new Date(startDate);
 
-  if (subscriptionType === "day") {
-    endDate.setDate(endDate.getDate() + duration);
-  } else if (subscriptionType === "month") {
+  if (subscriptionType === "month") {
     endDate.setMonth(endDate.getMonth() + duration);
+  } else if (subscriptionType === "semiannual") {
+    endDate.setMonth(endDate.getMonth() + 5 + duration);
   } else if (subscriptionType === "year") {
-    endDate.setFullYear(endDate.getFullYear() + duration);
+    endDate.setFullYear(endDate.getFullYear() + 11 + duration);
   }
 
   return endDate;

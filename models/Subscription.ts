@@ -14,7 +14,7 @@ const subscriptionSchema: Schema<ISubscription> = new Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     subscriptionType: {
       type: String,
-      enum: ["day", "month", "year"],
+      enum: ["month", "semiannual", "year"],
       required: true,
     },
     startDate: { type: Date, required: true },
