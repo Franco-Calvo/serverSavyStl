@@ -1,7 +1,7 @@
 //@ts-nocheck
 import cron from "node-cron";
-import User from "../models/Users";
-import Subscription from "../models/Subscription";
+import User from "../models/Users.js";
+import Subscription from "../models/Subscription.js";
 
 cron.schedule("0 0 * * *", async function () {
   try {

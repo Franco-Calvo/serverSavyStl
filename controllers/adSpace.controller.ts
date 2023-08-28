@@ -1,4 +1,4 @@
-import AdSpaceModel, { IAdSpace } from "../models/AdvertisingSpace";
+import AdSpaceModel, { IAdSpace } from "../models/AdvertisingSpace.js";
 import { Request, Response, NextFunction } from "express";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import s3 from "../config/aws.js";
