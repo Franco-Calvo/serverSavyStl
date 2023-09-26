@@ -5,7 +5,7 @@ import { handleErrorMessage } from "../../middlewares/response_handler.js";
 export const getCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find();
-    res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
+    // res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
     res.json(categories);
   } catch (err) {
     handleErrorMessage(err, req, res);
@@ -18,7 +18,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
     }
-    res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
+    // res.setHeader("Cache-Control", "public, max-age=3600"); // Cache durante 1 hora
     res.json(category);
   } catch (err) {
     handleErrorMessage(err, req, res);

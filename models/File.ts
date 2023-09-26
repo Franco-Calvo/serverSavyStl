@@ -6,7 +6,7 @@ export interface IFile {
   image: string;
   fileModel: string;
   category: string;
-  status: "public" | "private";
+  // status: "public" | "private";
   _id?: mongoose.Schema.Types.ObjectId;
 }
 
@@ -16,12 +16,12 @@ const schema: Schema<IFile> = new Schema({
   image: { type: String, required: true },
   fileModel: { type: String, required: true },
   category: { type: String, required: true },
-  status: {
-    type: String,
-    required: true,
-    enum: ["public", "private"],
-    default: "public",
-  },
+  // status: {
+  //   type: String,
+  //   required: false,
+  //   enum: ["public", "private"],
+  //   default: "public",
+  // },
 });
 
 const FileModel: Model<IFile> = mongoose.model("files", schema);
